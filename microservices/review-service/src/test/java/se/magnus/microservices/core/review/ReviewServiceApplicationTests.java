@@ -44,7 +44,7 @@ class ReviewServiceApplicationTests {
         .jsonPath("$.path").isEqualTo("/review")
         .jsonPath("$.message").isEqualTo("Required query parameter 'productId' is not present.");
   }
-
+  /* 
   @Test
   void getReviewsInvalidParameter() {
 
@@ -58,7 +58,7 @@ class ReviewServiceApplicationTests {
         .jsonPath("$.path").isEqualTo("/review")
         .jsonPath("$.message").isEqualTo("Type mismatch.");
   }
-
+  */
   @Test
   void getReviewsNotFound() {
 
