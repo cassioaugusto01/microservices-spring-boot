@@ -8,34 +8,40 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ExceptionBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 
 @RestControllerAdvice
-public class GlobalControllerExceptionHandler {
+class GlobalControllerExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
-    @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public @responseBody HttpErrorInfo handleNotFoundExceptions(
-        ServerHttpRequest request, NotFoundException ex) {
+  @ResponseStatus(NOT_FOUND)
+  @ExceptionHandler(NotFoundException.class)
+  public @ResponseBody HttpErrorInfo handleNotFoundExceptions(
+    ServerHttpRequest request, NotFoundException ex) {
 
-            return createHttpErrorInfo(NOT_FOUND, request, ex);
-    }
+    return createHttpErrorInfo(NOT_FOUND, request, ex);
+  }
 
-    private HttpErrorInfo createHttpErrorInfo(
-        HttpStatus httpStatus, ServerHttpRequest request, Exception ex) {
+  @ResponseStatus(UNPROCESSABLE_ENTITY)
+  @ExceptionHandler(InvalidInputException.class)
+  public @ResponseBody HttpErrorInfo handleInvalidInputException(
+    ServerHttpRequest request, InvalidInputException ex) {
 
-            final String path = request.getPath().pathWithinApplication().value();
-            final String message = ex.getMessage();
+    return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+  }
 
-            LOG.debug("Returning HTTP status: {} for path: {}, message: {}", httpStatus, path, message);
+  private HttpErrorInfo createHttpErrorInfo(
+    HttpStatus httpStatus, ServerHttpRequest request, Exception ex) {
 
-            return new HttpErrorInfo(httpStatus, path, message);
-    }
-    
+    final String path = request.getPath().pathWithinApplication().value();
+    final String message = ex.getMessage();
+
+    LOG.debug("Returning HTTP status: {} for path: {}, message: {}", httpStatus, path, message);
+    return new HttpErrorInfo(httpStatus, path, message);
+  }
 }

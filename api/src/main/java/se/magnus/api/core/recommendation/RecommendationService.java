@@ -6,16 +6,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface RecommendationService {
 
-    @GetMapping(
-        value    = "/recommendation",
-        produces = "application/json")
-
-        /**
-         * Sample usage: curl $HOST:$PORT/recommendation?productId=1
-         * @param productId
-         * @return the recommendations for the specified product
-         */
-    List<Recommendation> getRecommendations(
-        @RequestParam(value = "productId", required = true) int productId);
-    
+  /**
+   * Sample usage: "curl $HOST:$PORT/recommendation?productId=1".
+   *
+   * @param productId Id of the product
+   * @return the recommendations of the product
+   */
+  @GetMapping(
+    value = "/recommendation",
+    produces = "application/json")
+  List<Recommendation> getRecommendations(
+    @RequestParam(value = "productId", required = true) int productId);
 }
