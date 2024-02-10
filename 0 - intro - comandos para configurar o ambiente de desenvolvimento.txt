@@ -1,0 +1,81 @@
+Installing WSL 2 together with a default Ubuntu server
+
+Installing a new Ubuntu 22.04 server on WSL 2
+
+Installing Docker Desktop for Windows
+
+Installing Visual Studio Code and its extension for Remote WSL
+
+Installing tools on the Linux server in WSL 2
+
+Installing tools using apt install
+In this section, we will install jq, siege, Helm, and a couple of dependencies required by the other tools.
+Install jq, zip, unzip, and siege with the following commands:
+sudo apt update
+sudo apt install -y jq
+sudo apt install -y zip
+sudo apt install -y unzip
+sudo apt install -y siege
+To install Helm, run the following commands:
+curl -s https://baltocdn.com/helm/signing.asc | \Chapter 22
+615
+gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) \
+signed-by=/usr/share/keyrings/helm.gpg] \
+https://baltocdn.com/helm/stable/debian/ all main" | \
+sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt install -y helm
+Installing the Java and Spring Boot CLI using SDKman
+To install the Java and Spring Boot CLI, we will use SDKman (https://sdkman.io). Install SDKman
+with the following commands:
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+Verify that SDKman was installed correctly with the following command:
+sdk version
+Expect it to return something like this:
+SDKMAN5.9.2+613
+To install Java, we will use a distribution named Eclipse Temurin (https://adoptium.
+net/temurin/).
+Install Java with this command:
+sdk install java 17.0.6-tem
+Finally, install the Spring Boot CLI:
+sdk install springboot 3.0.4
+
+curl -LO "https://dl.k8s.io/release/v1.26.1/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl
+
+curl -LO https://storage.googleapis.com/minikube/releases/v1.29.0/minikube-
+linux-amd64
+sudo install -o root -g root -m 0755 minikube-linux-amd64 \
+/usr/local/bin/minikube
+rm minikube-linux-amd64
+
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.17.0 TARGET_
+ARCH=x86_64 sh -
+sudo install -o root -g root -m 0755 istio-1.17.0/bin/istioctl /usr/local/bin/
+istioctl
+rm -r istio-1.17.0
+
+git version && \
+docker version -f json | jq -r .Client.Version && \
+java -version 2>&1 | grep "openjdk version" && \
+curl --version | grep "curl" | sed 's/(.*//' && \
+jq --version && \
+spring --version && \
+siege --version 2>&1 | grep SIEGE && \
+helm version --short && \
+
+kubectl version --client -o json | \
+jq -r .clientVersion.gitVersion && \
+minikube version | grep "minikube" && \
+istioctl version --remote=false
+
+export BOOK_HOME=~/Microservices-with-Spring-Boot-and-Spring-Cloud-Third-
+Edition
+git clone https://github.com/PacktPublishing/Microservices-with-Spring-Boot-
+and-Spring-Cloud-Third-Edition.git $BOOK_HOME
+cd $BOOK_HOME
+code .
